@@ -25,8 +25,11 @@ type PaymentCreate struct {
 	// Memo is a plain-text note from the customer to the payment host.
 	Memo string `json:"memo" example:"for invoice 123456"`
 	// SPVEnvelope which contains the details of previous transaction and Merkle proof of each input UTXO.
+	// Should be available if SPVRequired is set to true in the paymentRequest.
 	// See https://tsc.bitcoinassociation.net/standards/spv-envelope/
 	SPVEnvelope *spv.Envelope `json:"spvEnvelope"`
+	// RawTX should be sent if SPVRequired is set to false in the payment request.
+	RawTX null.String `json:"rawTx"`
 	// ProofCallbacks are optional and can be supplied when the sender wants to receive
 	// a merkleproof for the transaction they are submitting as part of the SPV Envelope.
 	//
@@ -38,7 +41,12 @@ type PaymentCreate struct {
 // Validate will ensure the users request is correct.
 func (p PaymentCreate) Validate() error {
 	v := validator.New().
-		Validate("spvEnvelope", validator.NotEmpty(p.SPVEnvelope)).
+		Validate("spvEnvelope/rawTx", func() error {
+			if p.RawTX.IsZero() && p.SPVEnvelope == nil {
+				return errors.New("either an SPVEnvelope or a rawTX are required")
+			}
+			return nil
+		}).
 		Validate("merchantData.extendedData", validator.NotEmpty(p.MerchantData.ExtendedData))
 	if p.MerchantData.ExtendedData != nil {
 		v = v.Validate("merchantData.paymentReference", validator.NotEmpty(p.MerchantData.ExtendedData["paymentReference"]))
@@ -59,6 +67,14 @@ func (p PaymentCreate) Validate() error {
 
 				return nil
 			})
+	}
+	if !p.RawTX.IsZero() {
+		v = v.Validate("rawTx", func() error {
+			if _, err := bt.NewTxFromString(p.SPVEnvelope.RawTx); err != nil {
+				return errors.Wrap(err, "invalid rawTx supplied")
+			}
+			return nil
+		})
 	}
 	if p.RefundTo.Valid {
 		v = v.Validate("refundTo", validator.StrLength(p.RefundTo.String, 0, 100))
