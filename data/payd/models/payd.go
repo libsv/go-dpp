@@ -3,7 +3,6 @@ package models
 import (
 	"github.com/libsv/go-bc/spv"
 	"github.com/libsv/go-bt/v2"
-	"gopkg.in/guregu/null.v3"
 
 	"github.com/libsv/go-p4"
 )
@@ -11,7 +10,7 @@ import (
 // PayDPaymentRequest is used to send a payment to PayD for valdiation and storage.
 type PayDPaymentRequest struct {
 	SPVEnvelope    *spv.Envelope               `json:"spvEnvelope"`
-	RawTX          null.String                 `json:"rawTx"`
+	RawTX          *string                     `json:"rawTx"`
 	ProofCallbacks map[string]p4.ProofCallback `json:"proofCallbacks"`
 }
 
