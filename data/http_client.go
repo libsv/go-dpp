@@ -76,16 +76,24 @@ func (c *client) handleErr(resp *http.Response, expStatus int) error {
 		return brErr.Errors
 	}
 
-	var msg p4.ClientError
-	if err := json.NewDecoder(resp.Body).Decode(&msg); err != nil {
-		return errors.WithStack(err)
-	}
 	switch resp.StatusCode {
 	case http.StatusNotFound:
+		var msg p4.ClientError
+		if err := json.NewDecoder(resp.Body).Decode(&msg); err != nil {
+			return errors.WithStack(err)
+		}
 		return errs.NewErrNotFound(msg.Code, msg.Message)
 	case http.StatusConflict:
+		var msg p4.ClientError
+		if err := json.NewDecoder(resp.Body).Decode(&msg); err != nil {
+			return errors.WithStack(err)
+		}
 		return errs.NewErrDuplicate(msg.Code, msg.Message)
 	case http.StatusUnprocessableEntity:
+		var msg p4.ClientError
+		if err := json.NewDecoder(resp.Body).Decode(&msg); err != nil {
+			return errors.WithStack(err)
+		}
 		return errs.NewErrUnprocessable(msg.Code, msg.Message)
 	default:
 		body, _ := ioutil.ReadAll(resp.Body)
