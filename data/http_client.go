@@ -55,32 +55,7 @@ func (c *client) Do(ctx context.Context, method, endpoint string, expStatus int,
 		_ = resp.Body.Close()
 	}()
 	if resp.StatusCode != expStatus {
-		if resp.StatusCode == http.StatusBadRequest {
-			brErr := p4.BadRequestError{
-				Errors: make(validator.ErrValidation, 0),
-			}
-			if err := json.NewDecoder(resp.Body).Decode(&brErr); err != nil {
-				return errors.WithStack(err)
-			}
-			return brErr.Errors
-		}
-
-		var msg p4.ClientError
-		if err := json.NewDecoder(resp.Body).Decode(&msg); err != nil {
-			return errors.WithStack(err)
-		}
-		switch resp.StatusCode {
-		case http.StatusNotFound:
-			return errs.NewErrNotFound(msg.Code, msg.Message)
-		case http.StatusConflict:
-			return errs.NewErrDuplicate(msg.Code, msg.Message)
-		case http.StatusUnprocessableEntity:
-			return errs.NewErrUnprocessable(msg.Code, msg.Message)
-		default:
-			body, _ := ioutil.ReadAll(resp.Body)
-			return fmt.Errorf("error for '%s' '%s'. Status Received : '%d', Status Expected : '%d'. \nBody: %s", method, endpoint, resp.StatusCode, expStatus, body)
-		}
-
+		return c.handleErr(resp, expStatus)
 	}
 	if out != nil {
 		if err := json.NewDecoder(resp.Body).Decode(&out); err != nil {
@@ -88,4 +63,32 @@ func (c *client) Do(ctx context.Context, method, endpoint string, expStatus int,
 		}
 	}
 	return nil
+}
+
+func (c *client) handleErr(resp *http.Response, expStatus int) error {
+	if resp.StatusCode == http.StatusBadRequest {
+		brErr := p4.BadRequestError{
+			Errors: make(validator.ErrValidation),
+		}
+		if err := json.NewDecoder(resp.Body).Decode(&brErr); err != nil {
+			return errors.WithStack(err)
+		}
+		return brErr.Errors
+	}
+
+	var msg p4.ClientError
+	if err := json.NewDecoder(resp.Body).Decode(&msg); err != nil {
+		return errors.WithStack(err)
+	}
+	switch resp.StatusCode {
+	case http.StatusNotFound:
+		return errs.NewErrNotFound(msg.Code, msg.Message)
+	case http.StatusConflict:
+		return errs.NewErrDuplicate(msg.Code, msg.Message)
+	case http.StatusUnprocessableEntity:
+		return errs.NewErrUnprocessable(msg.Code, msg.Message)
+	default:
+		body, _ := ioutil.ReadAll(resp.Body)
+		return fmt.Errorf("error for '%s' '%s'. Status Received : '%d', Status Expected : '%d'. \nBody: %s", resp.Request.Method, resp.Request.RequestURI, resp.StatusCode, expStatus, body)
+	}
 }
