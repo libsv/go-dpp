@@ -8,7 +8,9 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/libsv/go-p4"
 	"github.com/pkg/errors"
+	validator "github.com/theflyingcodr/govalidator"
 	"github.com/theflyingcodr/lathos/errs"
 )
 
@@ -53,11 +55,29 @@ func (c *client) Do(ctx context.Context, method, endpoint string, expStatus int,
 		_ = resp.Body.Close()
 	}()
 	if resp.StatusCode != expStatus {
+		if resp.StatusCode == http.StatusBadRequest {
+			mm := make(map[string]map[string]interface{}, 0)
+			if err := json.NewDecoder(resp.Body).Decode(&mm); err != nil {
+				return errors.WithStack(err)
+			}
+			vErr := make(validator.ErrValidation, 0)
+			for k, v := range mm["errors"] {
+				vErr[k] = []string{fmt.Sprint(v)}
+			}
+			return vErr
+		}
+
 		switch resp.StatusCode {
 		case http.StatusNotFound:
 			return errs.NewErrNotFound("404", fmt.Sprintf("item not found for '%s' '%s'", method, endpoint))
 		case http.StatusConflict:
 			return errs.NewErrDuplicate("409", fmt.Sprintf("item already exists for '%s' '%s'", method, endpoint))
+		case http.StatusUnprocessableEntity:
+			var msg p4.ClientError
+			if err := json.NewDecoder(resp.Body).Decode(&msg); err != nil {
+				return errors.WithStack(err)
+			}
+			return errs.NewErrUnprocessable(msg.Code, msg.Message)
 		default:
 			body, _ := ioutil.ReadAll(resp.Body)
 			return fmt.Errorf("error for '%s' '%s'. Status Received : '%d', Status Expected : '%d'. \nBody: %s", method, endpoint, resp.StatusCode, expStatus, body)
