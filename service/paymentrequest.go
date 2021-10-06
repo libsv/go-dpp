@@ -14,17 +14,15 @@ import (
 
 type paymentRequest struct {
 	walletCfg   *config.Server
-	deployCfg   *config.Deployment
 	destRdr     p4.DestinationReader
 	merchantRdr p4.MerchantReader
 }
 
 // NewPaymentRequest will setup and return a new PaymentRequest service that will generate outputs
 // using the provided outputter which is defined in server config.
-func NewPaymentRequest(walletCfg *config.Server, deployCfg *config.Deployment, destRdr p4.DestinationReader, merchantRdr p4.MerchantReader) *paymentRequest {
+func NewPaymentRequest(walletCfg *config.Server, destRdr p4.DestinationReader, merchantRdr p4.MerchantReader) *paymentRequest {
 	return &paymentRequest{
 		walletCfg:   walletCfg,
-		deployCfg:   deployCfg,
 		destRdr:     destRdr,
 		merchantRdr: merchantRdr,
 	}
@@ -53,7 +51,7 @@ func (p *paymentRequest) CreatePaymentRequest(ctx context.Context, args p4.Payme
 	// here we store paymentRef in extended data to allow some validation in payment flow
 	merchant.ExtendedData["paymentReference"] = args.PaymentID
 	return &p4.PaymentRequest{
-		Network:             string(p.deployCfg.Network),
+		Network:             dests.Network,
 		SPVRequired:         dests.SPVRequired,
 		Destinations:        p4.PaymentDestinations{Outputs: dests.Outputs},
 		FeeRate:             dests.Fees,

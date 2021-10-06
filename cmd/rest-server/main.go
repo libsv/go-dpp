@@ -63,10 +63,6 @@ func main() {
 		WithLog().
 		WithPayD().
 		Load()
-	// validate the config, fail if it fails.
-	if err := cfg.Validate(); err != nil {
-		log.Fatal(err)
-	}
 	config.SetupLog(cfg.Logging)
 	log.Infof("\n------Environment: %s -----\n", cfg.Server)
 
@@ -104,11 +100,11 @@ func main() {
 
 	// services
 	paymentSvc := service.NewPayment(paydStore)
-	paymentReqSvc := service.NewPaymentRequest(cfg.Server, cfg.Deployment, paydStore, paydStore)
+	paymentReqSvc := service.NewPaymentRequest(cfg.Server, paydStore, paydStore)
 	if cfg.PayD.Noop {
 		noopStore := noop.NewNoOp()
 		paymentSvc = service.NewPayment(noopStore)
-		paymentReqSvc = service.NewPaymentRequest(cfg.Server, cfg.Deployment, noopStore, noopStore)
+		paymentReqSvc = service.NewPaymentRequest(cfg.Server, noopStore, noopStore)
 	}
 	// handlers
 	p4Handlers.NewPaymentHandler(paymentSvc).RegisterRoutes(g)
