@@ -104,11 +104,11 @@ func main() {
 
 	// services
 	paymentSvc := service.NewPayment(paydStore)
-	paymentReqSvc := service.NewPaymentRequest(cfg.Server, paydStore, paydStore)
+	paymentReqSvc := service.NewPaymentRequest(cfg.Server, cfg.Deployment, paydStore, paydStore)
 	if cfg.PayD.Noop {
 		noopStore := noop.NewNoOp()
 		paymentSvc = service.NewPayment(noopStore)
-		paymentReqSvc = service.NewPaymentRequest(cfg.Server, noopStore, noopStore)
+		paymentReqSvc = service.NewPaymentRequest(cfg.Server, cfg.Deployment, noopStore, noopStore)
 	}
 	// handlers
 	p4Handlers.NewPaymentHandler(paymentSvc).RegisterRoutes(g)
