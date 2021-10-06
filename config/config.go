@@ -40,7 +40,7 @@ type NetworkType string
 
 // Supported bitcoin network types.
 const (
-	NetworkRegtest NetworkType = "mainnet"
+	NetworkRegtest NetworkType = "regtest"
 	NetworkSTN     NetworkType = "stn"
 	NetworkTestnet NetworkType = "testnet"
 	NetworkMainet  NetworkType = "mainnet"
