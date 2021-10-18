@@ -60,7 +60,7 @@ var doc = `{
                     "400": {
                         "description": "returned if the user input is invalid, usually an issue with the paymentID",
                         "schema": {
-                            "$ref": "#/definitions/http.ErrValidation"
+                            "$ref": "#/definitions/p4.ClientError"
                         }
                     },
                     "404": {
@@ -117,7 +117,7 @@ var doc = `{
                     "400": {
                         "description": "returned if the user input is invalid, usually an issue with the paymentID",
                         "schema": {
-                            "$ref": "#/definitions/http.ErrValidation"
+                            "$ref": "#/definitions/p4.ClientError"
                         }
                     },
                     "404": {
@@ -197,15 +197,6 @@ var doc = `{
         },
         "bt.FeeQuote": {
             "type": "object"
-        },
-        "http.ErrValidation": {
-            "type": "object",
-            "additionalProperties": {
-                "type": "array",
-                "items": {
-                    "type": "string"
-                }
-            }
         },
         "p4.ClientError": {
             "type": "object",

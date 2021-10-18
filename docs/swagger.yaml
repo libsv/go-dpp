@@ -39,12 +39,6 @@ definitions:
     type: object
   bt.FeeQuote:
     type: object
-  http.ErrValidation:
-    additionalProperties:
-      items:
-        type: string
-      type: array
-    type: object
   p4.ClientError:
     properties:
       code:
@@ -283,7 +277,7 @@ paths:
           description: returned if the user input is invalid, usually an issue with
             the paymentID
           schema:
-            $ref: '#/definitions/http.ErrValidation'
+            $ref: '#/definitions/p4.ClientError'
         "404":
           description: returned if the paymentID has not been found
           schema:
@@ -325,7 +319,7 @@ paths:
           description: returned if the user input is invalid, usually an issue with
             the paymentID
           schema:
-            $ref: '#/definitions/http.ErrValidation'
+            $ref: '#/definitions/p4.ClientError'
         "404":
           description: returned if the paymentID has not been found
           schema:
