@@ -1,25 +1,16 @@
 package main
 
 import (
-	"crypto/tls"
-	"fmt"
-	"net/http"
-	"time"
-
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
 
-	"github.com/libsv/go-p4/data"
-	"github.com/libsv/go-p4/data/noop"
-	docs "github.com/libsv/go-p4/docs"
+	"github.com/libsv/go-p4/cmd/internal"
+	"github.com/libsv/go-p4/docs"
 
 	"github.com/labstack/gommon/log"
-	"github.com/spf13/viper"
 
 	"github.com/libsv/go-p4/config"
-	"github.com/libsv/go-p4/data/payd"
-	"github.com/libsv/go-p4/service"
 	p4Handlers "github.com/libsv/go-p4/transports/http"
 
 	p4Middleware "github.com/libsv/go-p4/transports/http/middleware"
@@ -84,47 +75,15 @@ func main() {
 	}
 
 	if cfg.Deployment.IsDev() {
-		printDev(e)
+		internal.PrintDev(e)
 	}
 
-	httpClient := &http.Client{Timeout: 5 * time.Second}
-	if !cfg.PayD.Secure { // for testing, don't validate server cert
-		// #nosec
-		httpClient.Transport = &http.Transport{
-			// #nosec
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		}
-	}
-	// stores
-	paydStore := payd.NewPayD(cfg.PayD, data.NewClient(httpClient))
+	// setup services
+	deps := internal.SetupDeps(*cfg)
 
-	// services
-	paymentSvc := service.NewPayment(paydStore)
-	paymentReqSvc := service.NewPaymentRequest(cfg.Server, paydStore, paydStore)
-	if cfg.PayD.Noop {
-		noopStore := noop.NewNoOp()
-		paymentSvc = service.NewPayment(noopStore)
-		paymentReqSvc = service.NewPaymentRequest(cfg.Server, noopStore, noopStore)
-	}
 	// handlers
-	p4Handlers.NewPaymentHandler(paymentSvc).RegisterRoutes(g)
-	p4Handlers.NewPaymentRequestHandler(paymentReqSvc).RegisterRoutes(g)
+	p4Handlers.NewPaymentHandler(deps.PaymentService).RegisterRoutes(g)
+	p4Handlers.NewPaymentRequestHandler(deps.PaymentRequestService).RegisterRoutes(g)
 
 	e.Logger.Fatal(e.Start(cfg.Server.Port))
-}
-
-// printDev outputs some useful dev information such as http routes
-// and current settings being used.
-func printDev(e *echo.Echo) {
-	fmt.Println("==================================")
-	fmt.Println("DEV mode, printing http routes:")
-	for _, r := range e.Routes() {
-		fmt.Printf("%s: %s\n", r.Method, r.Path)
-	}
-	fmt.Println("==================================")
-	fmt.Println("DEV mode, printing settings:")
-	for _, v := range viper.AllKeys() {
-		fmt.Printf("%s: %v\n", v, viper.Get(v))
-	}
-	fmt.Println("==================================")
 }

@@ -2,6 +2,6 @@ version: "3.7"
 
 services:
   p4:
-    image: local.p4
+    image: local.p4-socket
     build:
       context: .

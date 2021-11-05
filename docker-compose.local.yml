@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  p4:
+    container_name: p4
+    image: local.p4-socket
+
+  p4-merchant:
+    container_name: p4-merchant
+    image: local.p4-socket
+
