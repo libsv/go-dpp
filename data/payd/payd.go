@@ -87,7 +87,7 @@ func (p *payd) Destinations(ctx context.Context, args p4.PaymentRequestArgs) (*p
 
 // ProofCreate will pass on the proof to a payd instance for storage.
 func (p *payd) ProofCreate(ctx context.Context, args p4.ProofCreateArgs, req envelope.JSONEnvelope) error {
-	if err := p.client.Do(ctx, http.MethodPost, fmt.Sprintf(urlDestinations, p.baseURL(), args.TxID), http.StatusCreated, req, nil); err != nil {
+	if err := p.client.Do(ctx, http.MethodPost, fmt.Sprintf(urlProofs, p.baseURL(), args.TxID), http.StatusCreated, req, nil); err != nil {
 		return errors.WithStack(err)
 	}
 	return nil

@@ -17,11 +17,14 @@ import (
 	"github.com/libsv/go-p4/service"
 )
 
+// Deps holds all the dependencies.
 type Deps struct {
 	PaymentService        p4.PaymentService
 	PaymentRequestService p4.PaymentRequestService
+	ProofsService         p4.ProofsService
 }
 
+// SetupDeps will setup all required dependent services.
 func SetupDeps(cfg config.Config) *Deps {
 	httpClient := &http.Client{Timeout: 5 * time.Second}
 	if !cfg.PayD.Secure { // for testing, don't validate server cert
@@ -42,10 +45,12 @@ func SetupDeps(cfg config.Config) *Deps {
 		paymentSvc = service.NewPayment(noopStore)
 		paymentReqSvc = service.NewPaymentRequest(cfg.Server, noopStore, noopStore)
 	}
+	proofService := service.NewProof(paydStore)
 
 	return &Deps{
 		PaymentService:        paymentSvc,
 		PaymentRequestService: paymentReqSvc,
+		ProofsService:         proofService,
 	}
 }
 

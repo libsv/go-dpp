@@ -11,6 +11,7 @@ import (
 type payment struct {
 }
 
+// NewPayment will setup and return a new instance of a payment handler.
 func NewPayment() *payment {
 	return &payment{}
 }

@@ -11,6 +11,7 @@ import (
 type paymentRequest struct {
 }
 
+// NewPaymentRequest will setup a new instance of a paymentRequest handler.
 func NewPaymentRequest() *paymentRequest {
 	return &paymentRequest{}
 }

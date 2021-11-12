@@ -63,6 +63,13 @@ func (v *ViperConfig) WithPayD() ConfigurationLoader {
 	return v
 }
 
+// WithSockets reads socket env vars.
+func (v *ViperConfig) WithSockets() ConfigurationLoader {
+	v.Sockets = &Socket{
+		ChannelTimeoutSeconds: viper.GetInt(EnvSocketChannelTimeout)}
+	return v
+}
+
 // Load will return the underlying config setup.
 func (v *ViperConfig) Load() *Config {
 	return v.Config

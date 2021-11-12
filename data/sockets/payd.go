@@ -10,11 +10,11 @@ import (
 )
 
 type payd struct {
-	s sockets.ChannelBroadcaster
+	s sockets.ServerChannelBroadcaster
 }
 
 // NewPayd will setup and return a new payd socket data store.
-func NewPayd(b sockets.ChannelBroadcaster) *payd {
+func NewPayd(b sockets.ServerChannelBroadcaster) *payd {
 	return &payd{s: b}
 }
 
@@ -28,6 +28,5 @@ func (p *payd) ProofCreate(ctx context.Context, args p4.ProofCreateArgs, req env
 	}
 	msg.Headers.Add("x-tx-id", args.TxID)
 	p.s.Broadcast(args.PaymentReference, msg)
-	// TODO - close channel
 	return nil
 }

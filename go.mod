@@ -12,13 +12,14 @@ require (
 	github.com/libsv/go-bt/v2 v2.0.0-beta.9
 	github.com/matryer/is v1.4.0
 	github.com/pkg/errors v0.9.1
+	github.com/prometheus/client_golang v1.11.0
 	github.com/spf13/viper v1.9.0
 	github.com/stretchr/testify v1.7.0
 	github.com/swaggo/echo-swagger v1.1.4
 	github.com/swaggo/swag v1.7.4
 	github.com/theflyingcodr/govalidator v0.0.2
 	github.com/theflyingcodr/lathos v0.0.5
-	github.com/theflyingcodr/sockets v0.0.5-beta
+	github.com/theflyingcodr/sockets v0.0.9-beta
 )
 
 require (
@@ -46,7 +47,6 @@ require (
 	github.com/mitchellh/mapstructure v1.4.2 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/prometheus/client_golang v1.11.0 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.26.0 // indirect
 	github.com/prometheus/procfs v0.6.0 // indirect

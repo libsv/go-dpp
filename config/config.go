@@ -23,6 +23,7 @@ const (
 	EnvPaydSecure           = "payd.secure"
 	EnvPaydCertPath         = "payd.cert.path"
 	EnvPaydNoop             = "payd.noop"
+	EnvSocketChannelTimeout = "socket.channel.timeout"
 
 	LogDebug = "debug"
 	LogInfo  = "info"
@@ -36,6 +37,7 @@ type Config struct {
 	Server     *Server
 	Deployment *Deployment
 	PayD       *PayD
+	Sockets    *Socket
 }
 
 // Deployment contains information relating to the current
@@ -87,6 +89,11 @@ type PayD struct {
 	Noop            bool
 }
 
+// Socket contains config items for a socket server.
+type Socket struct {
+	ChannelTimeoutSeconds int
+}
+
 // ConfigurationLoader will load configuration items
 // into a struct that contains a configuration.
 type ConfigurationLoader interface {
@@ -94,5 +101,6 @@ type ConfigurationLoader interface {
 	WithDeployment(app string) ConfigurationLoader
 	WithLog() ConfigurationLoader
 	WithPayD() ConfigurationLoader
+	WithSockets() ConfigurationLoader
 	Load() *Config
 }
