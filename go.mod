@@ -19,7 +19,7 @@ require (
 	github.com/swaggo/swag v1.7.4
 	github.com/theflyingcodr/govalidator v0.0.2
 	github.com/theflyingcodr/lathos v0.0.5
-	github.com/theflyingcodr/sockets v0.0.9-beta
+	github.com/theflyingcodr/sockets v0.0.10-beta
 )
 
 require (

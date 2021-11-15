@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"github.com/libsv/go-bk/envelope"
 	"github.com/pkg/errors"
@@ -27,7 +26,6 @@ func NewProof(store p4.ProofsWriter) *proof {
 // Create will add an object to the data store, rejecting the request
 // if it fails to match required validation params.
 func (s *proof) Create(ctx context.Context, args p4.ProofCreateArgs, req envelope.JSONEnvelope) error {
-	fmt.Printf("%#v\n", req)
 	var proof *p4.ProofWrapper
 	if err := json.Unmarshal([]byte(req.Payload), &proof); err != nil {
 		return errors.Wrap(err, "failed to unmarshall JSONEnvelope")

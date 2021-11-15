@@ -6,11 +6,9 @@ import (
 	echoSwagger "github.com/swaggo/echo-swagger"
 
 	"github.com/libsv/go-p4/cmd/internal"
-	"github.com/libsv/go-p4/docs"
-
-	"github.com/labstack/gommon/log"
-
 	"github.com/libsv/go-p4/config"
+	"github.com/libsv/go-p4/docs"
+	"github.com/libsv/go-p4/log"
 	p4Handlers "github.com/libsv/go-p4/transports/http"
 
 	p4Middleware "github.com/libsv/go-p4/transports/http/middleware"
@@ -54,7 +52,7 @@ func main() {
 		WithLog().
 		WithPayD().
 		Load()
-	config.SetupLog(cfg.Logging)
+	log := log.NewZero(cfg.Logging)
 	log.Infof("\n------Environment: %s -----\n", cfg.Server)
 
 	e := echo.New()
@@ -68,7 +66,7 @@ func main() {
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
-	e.HTTPErrorHandler = p4Middleware.ErrorHandler
+	e.HTTPErrorHandler = p4Middleware.ErrorHandler(log)
 	if cfg.Server.SwaggerEnabled {
 		docs.SwaggerInfo.Host = cfg.Server.SwaggerHost
 		e.GET("/swagger/*", echoSwagger.WrapHandler)

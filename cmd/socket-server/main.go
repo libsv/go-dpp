@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"os/signal"
 	"time"
@@ -11,11 +10,11 @@ import (
 	echoProm "github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/labstack/gommon/log"
 	"github.com/libsv/go-p4/cmd/internal"
 	"github.com/libsv/go-p4/config"
 	"github.com/libsv/go-p4/data/sockets"
 	"github.com/libsv/go-p4/docs"
+	"github.com/libsv/go-p4/log"
 	"github.com/libsv/go-p4/service"
 	p4Handlers "github.com/libsv/go-p4/transports/http"
 	p4Middleware "github.com/libsv/go-p4/transports/http/middleware"
@@ -66,7 +65,7 @@ func main() {
 		WithPayD().
 		WithSockets().
 		Load()
-	config.SetupLog(cfg.Logging)
+	log := log.NewZero(cfg.Logging)
 	log.Infof("\n------Environment: %s -----\n", cfg.Server)
 
 	e := echo.New()
@@ -78,7 +77,7 @@ func main() {
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
-	e.HTTPErrorHandler = p4Middleware.ErrorHandler
+	e.HTTPErrorHandler = p4Middleware.ErrorHandler(log)
 	if cfg.Server.SwaggerEnabled {
 		docs.SwaggerInfo.Host = cfg.Server.SwaggerHost
 		e.GET("/swagger/*", echoSwagger.WrapHandler)
@@ -108,12 +107,10 @@ func main() {
 	})
 
 	s.OnClientJoin(func(clientID, channelID string) {
-		fmt.Println("client join")
 		gCo.Inc()
 	})
 
 	s.OnClientLeave(func(clientID, channelID string) {
-		fmt.Println("client leave")
 		gCo.Dec()
 	})
 
@@ -140,7 +137,7 @@ func main() {
 	}
 
 	go func() {
-		log.Error(e.Start(cfg.Server.Port))
+		log.Error(e.Start(cfg.Server.Port), "echo server failed")
 	}()
 
 	// Wait for interrupt signal to gracefully shutdown the server with a timeout of 10 seconds.
@@ -153,7 +150,7 @@ func main() {
 	defer cancel()
 
 	if err := e.Shutdown(ctx); err != nil {
-		log.Error(err)
+		log.Error(err, "")
 	}
 }
 
@@ -172,8 +169,6 @@ func WsHandler(svr *server.SocketServer) echo.HandlerFunc {
 		if err := svr.Listen(ws, c.Param("channelID")); err != nil {
 			return err
 		}
-
-		fmt.Println("exiting listener")
 		return nil
 	}
 }

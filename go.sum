@@ -530,6 +530,8 @@ github.com/theflyingcodr/sockets v0.0.8-beta h1:CMm6xUzmuqQx3TouMQnkngsapNsLtrGE
 github.com/theflyingcodr/sockets v0.0.8-beta/go.mod h1:qvjSzBXbxI85gVpyXjTktCv8YQHSUggvA/hNVQ1+RNg=
 github.com/theflyingcodr/sockets v0.0.9-beta h1:3SBxJGlb3rCnlsaJVSbMDwrMvJhKg9cq3cB+Drb+V/0=
 github.com/theflyingcodr/sockets v0.0.9-beta/go.mod h1:9WuWIyja/Q8PF3WmblAjFmfzkKabEBLto2Gx1XYnerc=
+github.com/theflyingcodr/sockets v0.0.10-beta h1:mvY6RMBX3QXM8ZeMj3EYscD1o1OrlESWG6KlCLxILPA=
+github.com/theflyingcodr/sockets v0.0.10-beta/go.mod h1:9WuWIyja/Q8PF3WmblAjFmfzkKabEBLto2Gx1XYnerc=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20170815181823-89b8d40f7ca8/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
 github.com/uber/jaeger-client-go v2.25.0+incompatible/go.mod h1:WVhlPFC8FDjOFMMWRy2pZqQJSXxYSwNYOkTr/Z6d3Kk=
 github.com/uber/jaeger-lib v2.4.0+incompatible/go.mod h1:ComeNDZlWwrWnDv8aPp0Ba6+uUTzImX/AauajbLI56U=

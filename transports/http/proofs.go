@@ -1,7 +1,6 @@
 package http
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -38,7 +37,6 @@ func (p *proofs) RegisterRoutes(g *echo.Group) {
 // @Success 201
 // @Router /v1/proofs/{txid} [POST].
 func (p *proofs) create(c echo.Context) error {
-	fmt.Println("adding proof")
 	var req envelope.JSONEnvelope
 	if err := c.Bind(&req); err != nil {
 		return errors.WithStack(err)
