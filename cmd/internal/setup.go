@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"github.com/libsv/go-p4/log"
 	"github.com/spf13/viper"
 
 	"github.com/libsv/go-p4"
@@ -38,11 +39,11 @@ func SetupDeps(cfg config.Config) *Deps {
 	paydStore := payd.NewPayD(cfg.PayD, data.NewClient(httpClient))
 
 	// services
-	paymentSvc := service.NewPayment(paydStore)
+	paymentSvc := service.NewPayment(log.Noop{}, paydStore)
 	paymentReqSvc := service.NewPaymentRequest(cfg.Server, paydStore, paydStore)
 	if cfg.PayD.Noop {
-		noopStore := noop.NewNoOp()
-		paymentSvc = service.NewPayment(noopStore)
+		noopStore := noop.NewNoOp(log.Noop{})
+		paymentSvc = service.NewPayment(log.Noop{}, noopStore)
 		paymentReqSvc = service.NewPaymentRequest(cfg.Server, noopStore, noopStore)
 	}
 	proofService := service.NewProof(paydStore)

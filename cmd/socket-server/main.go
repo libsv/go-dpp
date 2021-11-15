@@ -66,7 +66,7 @@ func main() {
 		WithSockets().
 		Load()
 	log := log.NewZero(cfg.Logging)
-	log.Infof("\n------Environment: %s -----\n", cfg.Server)
+	log.Infof("\n------Environment: %#v -----\n", cfg.Server)
 
 	e := echo.New()
 	e.HideBanner = true

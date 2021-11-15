@@ -7,6 +7,9 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// Logger provides a basic logging definition that can be implemented
+// by various log implementations and then passed as a dependency to
+// code that requires logging.
 type Logger interface {
 	Info(s string)
 	Infof(s string, a ...interface{})
@@ -20,6 +23,7 @@ type Logger interface {
 	Fatalf(err error, s string, a ...interface{})
 }
 
+// Noop does nothing.
 type Noop struct {
 }
 
@@ -74,7 +78,7 @@ func (z Zero) Info(s string) {
 
 // Infof writes an info level log with args.
 func (z Zero) Infof(s string, a ...interface{}) {
-	log.Info().Msgf(s, a)
+	log.Info().Msgf(s, a...)
 }
 
 // Warn writes a warning level log.
@@ -84,7 +88,7 @@ func (z Zero) Warn(s string) {
 
 // Warnf writes a warning level log.
 func (z Zero) Warnf(s string, a ...interface{}) {
-	log.Warn().Msgf(s, a)
+	log.Warn().Msgf(s, a...)
 }
 
 // Debug writes a debug level log.
@@ -94,7 +98,7 @@ func (z Zero) Debug(s string) {
 
 // Debugf writes a debug level log.
 func (z Zero) Debugf(s string, a ...interface{}) {
-	log.Debug().Msgf(s, a)
+	log.Debug().Msgf(s, a...)
 }
 
 // Error writes an error log.
@@ -104,7 +108,7 @@ func (z Zero) Error(err error, s string) {
 
 // Errorf writes an error log.
 func (z Zero) Errorf(err error, s string, a ...interface{}) {
-	log.Error().Err(errors.WithStack(err)).Msgf(s, a)
+	log.Error().Err(errors.WithStack(err)).Msgf(s, a...)
 }
 
 // Fatal writes a fatal log which will immediately terminate the program.
@@ -114,5 +118,5 @@ func (z Zero) Fatal(err error, s string) {
 
 // Fatalf writes a fatal log which will immediately terminate the program.
 func (z Zero) Fatalf(err error, s string, a ...interface{}) {
-	log.Fatal().Err(errors.WithStack(err)).Msgf(s, a)
+	log.Fatal().Err(errors.WithStack(err)).Msgf(s, a...)
 }
