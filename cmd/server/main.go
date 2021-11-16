@@ -1,17 +1,14 @@
 package main
 
 import (
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	echoSwagger "github.com/swaggo/echo-swagger"
+	"context"
+	"os"
+	"os/signal"
+	"time"
 
 	"github.com/libsv/go-p4/cmd/internal"
 	"github.com/libsv/go-p4/config"
-	"github.com/libsv/go-p4/docs"
 	"github.com/libsv/go-p4/log"
-	p4Handlers "github.com/libsv/go-p4/transports/http"
-
-	p4Middleware "github.com/libsv/go-p4/transports/http/middleware"
 )
 
 const appname = "payment-protocol-rest-server"
@@ -51,37 +48,46 @@ func main() {
 		WithDeployment(appname).
 		WithLog().
 		WithPayD().
+		WithSockets().
+		WithTransports().
 		Load()
 	log := log.NewZero(cfg.Logging)
 	log.Infof("\n------Environment: %#v -----\n", cfg.Server)
 
-	e := echo.New()
-	e.HideBanner = true
-	g := e.Group("/")
-	// Middleware
-	e.Use(middleware.Recover())
-	e.Use(middleware.Logger())
-	e.Use(middleware.RequestID())
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"*"},
-		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
-	}))
-	e.HTTPErrorHandler = p4Middleware.ErrorHandler(log)
+	e := internal.SetupEcho(log)
+
 	if cfg.Server.SwaggerEnabled {
-		docs.SwaggerInfo.Host = cfg.Server.SwaggerHost
-		e.GET("/swagger/*", echoSwagger.WrapHandler)
+		internal.SetupSwagger(*cfg.Server, e)
 	}
-
-	if cfg.Deployment.IsDev() {
-		internal.PrintDev(e)
-	}
-
 	// setup services
 	deps := internal.SetupDeps(*cfg)
 
-	// handlers
-	p4Handlers.NewPaymentHandler(deps.PaymentService).RegisterRoutes(g)
-	p4Handlers.NewPaymentRequestHandler(deps.PaymentRequestService).RegisterRoutes(g)
+	// setup transports
+	if cfg.Transports.HttpEnabled {
+		internal.SetupHttpEndpoints(deps, e)
+	}
+	if cfg.Transports.SocketsEnabled {
+		s := internal.SetupSockets(*cfg.Sockets, e)
+		internal.SetupSocketMetrics(s)
+		defer s.Close()
+	}
+	if cfg.Deployment.IsDev() {
+		internal.PrintDev(e)
+	}
+	go func() {
+		log.Error(e.Start(cfg.Server.Port), "echo server failed")
+	}()
 
-	e.Logger.Fatal(e.Start(cfg.Server.Port))
+	// Wait for interrupt signal to gracefully shutdown the server with a timeout of 10 seconds.
+	// Use a buffered channel to avoid missing signals as recommended for signal.Notify
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := e.Shutdown(ctx); err != nil {
+		log.Error(err, "")
+	}
+
 }

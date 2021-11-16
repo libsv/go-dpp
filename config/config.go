@@ -7,23 +7,26 @@ import (
 
 // Environment variable constants.
 const (
-	EnvServerPort           = "server.port"
-	EnvServerHost           = "server.host"
-	EnvServerFQDN           = "server.fqdn"
-	EnvServerSwaggerEnabled = "server.swagger.enabled"
-	EnvServerSwaggerHost    = "server.swagger.host"
-	EnvEnvironment          = "env.environment"
-	EnvRegion               = "env.region"
-	EnvVersion              = "env.version"
-	EnvCommit               = "env.commit"
-	EnvBuildDate            = "env.builddate"
-	EnvLogLevel             = "log.level"
-	EnvPaydHost             = "payd.host"
-	EnvPaydPort             = "payd.port"
-	EnvPaydSecure           = "payd.secure"
-	EnvPaydCertPath         = "payd.cert.path"
-	EnvPaydNoop             = "payd.noop"
-	EnvSocketChannelTimeout = "socket.channel.timeout"
+	EnvServerPort                  = "server.port"
+	EnvServerHost                  = "server.host"
+	EnvServerFQDN                  = "server.fqdn"
+	EnvServerSwaggerEnabled        = "server.swagger.enabled"
+	EnvServerSwaggerHost           = "server.swagger.host"
+	EnvEnvironment                 = "env.environment"
+	EnvRegion                      = "env.region"
+	EnvVersion                     = "env.version"
+	EnvCommit                      = "env.commit"
+	EnvBuildDate                   = "env.builddate"
+	EnvLogLevel                    = "log.level"
+	EnvPaydHost                    = "payd.host"
+	EnvPaydPort                    = "payd.port"
+	EnvPaydSecure                  = "payd.secure"
+	EnvPaydCertPath                = "payd.cert.path"
+	EnvPaydNoop                    = "payd.noop"
+	EnvSocketChannelTimeoutSeconds = "socket.channel.timeoutseconds"
+	EnvSocketMaxMessageBytes       = "socket.maxmessage.bytes"
+	EnvTransportHttpEnabled        = "transport.http.enabled"
+	EnvTransportSocketsEnabled     = "transport.sockets.enabled"
 
 	LogDebug = "debug"
 	LogInfo  = "info"
@@ -38,6 +41,7 @@ type Config struct {
 	Deployment *Deployment
 	PayD       *PayD
 	Sockets    *Socket
+	Transports *Transports
 }
 
 // Deployment contains information relating to the current
@@ -91,7 +95,14 @@ type PayD struct {
 
 // Socket contains config items for a socket server.
 type Socket struct {
-	ChannelTimeoutSeconds int
+	MaxMessageBytes int
+	ChannelTimeout  time.Duration
+}
+
+// Transports enables or disables p4 transports.
+type Transports struct {
+	HttpEnabled    bool
+	SocketsEnabled bool
 }
 
 // ConfigurationLoader will load configuration items
@@ -102,5 +113,6 @@ type ConfigurationLoader interface {
 	WithLog() ConfigurationLoader
 	WithPayD() ConfigurationLoader
 	WithSockets() ConfigurationLoader
+	WithTransports() ConfigurationLoader
 	Load() *Config
 }

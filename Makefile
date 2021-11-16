@@ -53,10 +53,7 @@ run-compose-local:
 	@docker-compose -f docker-compose.yml  -f docker-compose.local.yml up
 
 build-image:
-	@docker-compose -f docker-compose.yml -f docker-compose.build.yml build  --build-arg binary='rest-server'
-
-build-socket-image:
-	@docker-compose -f docker-compose.yml -f docker-compose.build.yml build --build-arg binary='socket-server'
+	@docker-compose -f docker-compose.yml -f docker-compose.build.yml build
 
 run-compose-dev-d:
 	@docker-compose -f docker-compose.yml -f docker-compose.build.yml -f docker-compose.dev.yml up -d

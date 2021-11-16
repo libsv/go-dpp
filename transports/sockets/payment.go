@@ -22,12 +22,12 @@ func (p *payment) Register(s *server.SocketServer) {
 	s.RegisterChannelHandler("payment.ack", p.paymentAck)
 }
 
-// buildPaymentRequest will forward a payment message to all connected clients.
+// payment will forward a payment message to all connected clients.
 func (p *payment) payment(ctx context.Context, msg *sockets.Message) (*sockets.Message, error) {
 	return msg, nil
 }
 
-// buildPaymentRequest will forward a payment.ack message to all connected clients.
+// paymentAck will forward a payment.ack message to all connected clients.
 func (p *payment) paymentAck(ctx context.Context, msg *sockets.Message) (*sockets.Message, error) {
 	return msg, nil
 }
