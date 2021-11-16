@@ -90,8 +90,8 @@ func SetupSwagger(cfg config.Server, e *echo.Echo) {
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 }
 
-// SetupHttpEndpoints will register the http endpoints.
-func SetupHttpEndpoints(deps *Deps, e *echo.Echo) {
+// SetupHTTPEndpoints will register the http endpoints.
+func SetupHTTPEndpoints(deps *Deps, e *echo.Echo) {
 	g := e.Group("/")
 	// handlers
 	p4Handlers.NewPaymentHandler(deps.PaymentService).RegisterRoutes(g)

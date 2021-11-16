@@ -4,7 +4,6 @@ go 1.17
 
 require (
 	github.com/gorilla/websocket v1.4.2
-	github.com/labstack/echo-contrib v0.11.0
 	github.com/labstack/echo/v4 v4.6.1
 	github.com/libsv/go-bc v0.1.7
 	github.com/libsv/go-bk v0.1.4

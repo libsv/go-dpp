@@ -63,8 +63,8 @@ func main() {
 	deps := internal.SetupDeps(*cfg)
 
 	// setup transports
-	if cfg.Transports.HttpEnabled {
-		internal.SetupHttpEndpoints(deps, e)
+	if cfg.Transports.HTTPEnabled {
+		internal.SetupHTTPEndpoints(deps, e)
 	}
 	if cfg.Transports.SocketsEnabled {
 		s := internal.SetupSockets(*cfg.Sockets, e)

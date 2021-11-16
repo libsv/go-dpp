@@ -25,7 +25,7 @@ const (
 	EnvPaydNoop                    = "payd.noop"
 	EnvSocketChannelTimeoutSeconds = "socket.channel.timeoutseconds"
 	EnvSocketMaxMessageBytes       = "socket.maxmessage.bytes"
-	EnvTransportHttpEnabled        = "transport.http.enabled"
+	EnvTransportHTTPEnabled        = "transport.http.enabled"
 	EnvTransportSocketsEnabled     = "transport.sockets.enabled"
 
 	LogDebug = "debug"
@@ -101,7 +101,7 @@ type Socket struct {
 
 // Transports enables or disables p4 transports.
 type Transports struct {
-	HttpEnabled    bool
+	HTTPEnabled    bool
 	SocketsEnabled bool
 }
 

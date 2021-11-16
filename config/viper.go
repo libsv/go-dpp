@@ -2,7 +2,6 @@ package config
 
 import (
 	"strings"
-	"time"
 
 	"github.com/spf13/viper"
 )
@@ -67,7 +66,7 @@ func (v *ViperConfig) WithPayD() ConfigurationLoader {
 // WithSockets reads socket env vars.
 func (v *ViperConfig) WithSockets() ConfigurationLoader {
 	v.Sockets = &Socket{
-		ChannelTimeout:  time.Duration(viper.GetDuration(EnvSocketChannelTimeoutSeconds) * time.Second),
+		ChannelTimeout:  viper.GetDuration(EnvSocketChannelTimeoutSeconds),
 		MaxMessageBytes: viper.GetInt(EnvSocketMaxMessageBytes),
 	}
 	return v
@@ -76,7 +75,7 @@ func (v *ViperConfig) WithSockets() ConfigurationLoader {
 // WithTransports reads transport config.
 func (v *ViperConfig) WithTransports() ConfigurationLoader {
 	v.Transports = &Transports{
-		HttpEnabled:    viper.GetBool(EnvTransportHttpEnabled),
+		HTTPEnabled:    viper.GetBool(EnvTransportHTTPEnabled),
 		SocketsEnabled: viper.GetBool(EnvTransportSocketsEnabled),
 	}
 	return v
