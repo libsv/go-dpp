@@ -9,6 +9,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/libsv/go-p4/data"
 	"github.com/libsv/go-p4/data/sockets"
 	"github.com/libsv/go-p4/docs"
 	"github.com/libsv/go-p4/log"
@@ -24,9 +25,8 @@ import (
 
 	"github.com/libsv/go-p4"
 	"github.com/libsv/go-p4/config"
-	"github.com/libsv/go-p4/data"
 	"github.com/libsv/go-p4/data/noop"
-	"github.com/libsv/go-p4/data/payd"
+	socData "github.com/libsv/go-p4/data/sockets"
 	"github.com/libsv/go-p4/service"
 )
 
@@ -48,11 +48,11 @@ func SetupDeps(cfg config.Config) *Deps {
 		}
 	}
 	// stores
-	paydStore := payd.NewPayD(cfg.PayD, data.NewClient(httpClient))
+	paydStore := socData.NewPayD(cfg.PayD, data.NewClient(httpClient))
 
 	// services
 	paymentSvc := service.NewPayment(log.Noop{}, paydStore)
-	paymentReqSvc := service.NewPaymentRequest(cfg.Server, paydStore, paydStore)
+	//paymentReqSvc := service.NewPaymentRequest(cfg.Server, paydStore, paydStore)
 	if cfg.PayD.Noop {
 		noopStore := noop.NewNoOp(log.Noop{})
 		paymentSvc = service.NewPayment(log.Noop{}, noopStore)
