@@ -10,6 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/libsv/go-p4/data"
+	"github.com/libsv/go-p4/data/payd"
 	"github.com/libsv/go-p4/data/sockets"
 	"github.com/libsv/go-p4/docs"
 	"github.com/libsv/go-p4/log"
@@ -48,11 +49,11 @@ func SetupDeps(cfg config.Config) *Deps {
 		}
 	}
 	// stores
-	paydStore := socData.NewPayD(cfg.PayD, data.NewClient(httpClient))
+	paydStore := payd.NewPayD(cfg.PayD, data.NewClient(httpClient))
 
 	// services
 	paymentSvc := service.NewPayment(log.Noop{}, paydStore)
-	//paymentReqSvc := service.NewPaymentRequest(cfg.Server, paydStore, paydStore)
+	paymentReqSvc := service.NewPaymentRequest(cfg.Server, paydStore, paydStore)
 	if cfg.PayD.Noop {
 		noopStore := noop.NewNoOp(log.Noop{})
 		paymentSvc = service.NewPayment(log.Noop{}, noopStore)
@@ -119,6 +120,25 @@ func SetupSockets(cfg config.Socket, e *echo.Echo) *server.SocketServer {
 	return s
 }
 
+// SetupHybrid will setup handlers for http=>socket communication.
+func SetupHybrid(cfg config.Config, e *echo.Echo) *server.SocketServer {
+	g := e.Group("/")
+	s := server.New(
+		server.WithMaxMessageSize(int64(cfg.Sockets.MaxMessageBytes)),
+		server.WithChannelTimeout(cfg.Sockets.ChannelTimeout))
+	paymentStore := socData.NewPayd(s)
+	paymentSvc := service.NewPayment(&log.Noop{}, paymentStore)
+	paymentReqSvc := service.NewPaymentRequestProxy(paymentStore)
+	proofsSvc := service.NewProof(paymentStore)
+
+	p4Handlers.NewPaymentHandler(paymentSvc).RegisterRoutes(g)
+	p4Handlers.NewPaymentRequestHandler(paymentReqSvc).RegisterRoutes(g)
+	p4Handlers.NewProofs(proofsSvc).RegisterRoutes(g)
+
+	e.GET("/ws/:channelID", wsHandler(s))
+	return s
+}
+
 // wsHandler will upgrade connections to a websocket and then wait for messages.
 func wsHandler(svr *server.SocketServer) echo.HandlerFunc {
 	upgrader := websocket.Upgrader{}
@@ -131,10 +151,7 @@ func wsHandler(svr *server.SocketServer) echo.HandlerFunc {
 		defer func() {
 			_ = ws.Close()
 		}()
-		if err := svr.Listen(ws, c.Param("channelID")); err != nil {
-			return err
-		}
-		return nil
+		return svr.Listen(ws, c.Param("channelID"))
 	}
 }
 

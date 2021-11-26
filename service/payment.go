@@ -38,7 +38,7 @@ func (p *payment) PaymentCreate(ctx context.Context, args p4.PaymentCreateArgs, 
 		return &p4.PaymentACK{
 			Memo:  err.Error(),
 			Error: 1,
-		}, nil
+		}, err
 	}
 	return ack, nil
 }

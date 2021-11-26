@@ -59,15 +59,17 @@ func main() {
 	if cfg.Server.SwaggerEnabled {
 		internal.SetupSwagger(*cfg.Server, e)
 	}
-	// setup services
-	deps := internal.SetupDeps(*cfg)
 
 	// setup transports
-	if cfg.Transports.HTTPEnabled {
-		internal.SetupHTTPEndpoints(deps, e)
-	}
-	if cfg.Transports.SocketsEnabled {
+	switch cfg.Transports.Mode {
+	case config.TransportModeHTTP:
+		internal.SetupHTTPEndpoints(internal.SetupDeps(*cfg), e)
+	case config.TransportModeSocket:
 		s := internal.SetupSockets(*cfg.Sockets, e)
+		internal.SetupSocketMetrics(s)
+		defer s.Close()
+	case config.TransportModeHybrid:
+		s := internal.SetupHybrid(*cfg, e)
 		internal.SetupSocketMetrics(s)
 		defer s.Close()
 	}

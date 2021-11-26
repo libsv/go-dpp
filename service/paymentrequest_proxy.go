@@ -11,7 +11,7 @@ import (
 
 // paymentRequestProxy simply acts as a pass-through to the data layer
 // where another service will create the paymentRequest.
-// TODO - remove the other payment request service
+// TODO - remove the other payment request service.
 type paymentRequestProxy struct {
 	preqRdr p4.PaymentRequestReader
 }

@@ -400,6 +400,8 @@ github.com/theflyingcodr/sockets v0.0.10-beta h1:mvY6RMBX3QXM8ZeMj3EYscD1o1OrlES
 github.com/theflyingcodr/sockets v0.0.10-beta/go.mod h1:9WuWIyja/Q8PF3WmblAjFmfzkKabEBLto2Gx1XYnerc=
 github.com/theflyingcodr/sockets v0.0.10-beta.0.20211119162701-afa2db4ab5fe h1:FSVUBHGS5ZjrealTGaZz75fWHmJAlz9d1yxfrBuJV/g=
 github.com/theflyingcodr/sockets v0.0.10-beta.0.20211119162701-afa2db4ab5fe/go.mod h1:9WuWIyja/Q8PF3WmblAjFmfzkKabEBLto2Gx1XYnerc=
+github.com/theflyingcodr/sockets v0.0.10-beta.0.20211124153518-9c97427df554 h1:Tv74K0i7dRkY8ZmbFQF1Tg0FdLW/DIa41B4VbBhY3Vg=
+github.com/theflyingcodr/sockets v0.0.10-beta.0.20211124153518-9c97427df554/go.mod h1:9WuWIyja/Q8PF3WmblAjFmfzkKabEBLto2Gx1XYnerc=
 github.com/urfave/cli/v2 v2.3.0/go.mod h1:LJmUH05zAU44vOAcrfzZQKsZbVcdbOG8rtL3/XcUArI=
 github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=
 github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyCJ6HpOuEn7z0Csc=

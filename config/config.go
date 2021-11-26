@@ -25,13 +25,16 @@ const (
 	EnvPaydNoop                    = "payd.noop"
 	EnvSocketChannelTimeoutSeconds = "socket.channel.timeoutseconds"
 	EnvSocketMaxMessageBytes       = "socket.maxmessage.bytes"
-	EnvTransportHTTPEnabled        = "transport.http.enabled"
-	EnvTransportSocketsEnabled     = "transport.sockets.enabled"
+	EnvTransportMode               = "transport.mode"
 
 	LogDebug = "debug"
 	LogInfo  = "info"
 	LogError = "error"
 	LogWarn  = "warn"
+
+	TransportModeHybrid = "hybrid"
+	TransportModeHTTP   = "http"
+	TransportModeSocket = "socket"
 )
 
 // Config returns strongly typed config values.
@@ -103,6 +106,7 @@ type Socket struct {
 type Transports struct {
 	HTTPEnabled    bool
 	SocketsEnabled bool
+	Mode           string
 }
 
 // ConfigurationLoader will load configuration items

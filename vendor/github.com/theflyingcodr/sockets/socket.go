@@ -39,9 +39,9 @@ type ServerChannelBroadcaster interface {
 	// Broadcast will send a message to all connected peers on a channel.
 	// To handle these messages you should register a handler using server.RegisterChannelHandler.
 	Broadcast(channelID string, msg *Message)
-	// BroadcastAndWait will broadcast a message to all peers but handle only the first one and return
+	// BroadcastAwait will broadcast a message to all peers but handle only the first one and return
 	// it to the caller. This is a blocking call.
-	BroadcastAndWait(ctx context.Context, channelID string, msg *Message) (*Message, error)
+	BroadcastAwait(ctx context.Context, channelID string, msg *Message) (*Message, error)
 }
 
 // Request is used to send a message to a channel with a specific key.

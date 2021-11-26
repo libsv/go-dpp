@@ -2,6 +2,7 @@ package sockets
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/libsv/go-bk/envelope"
@@ -49,7 +50,10 @@ func (p *payd) PaymentRequest(ctx context.Context, args p4.PaymentRequestArgs) (
 	msg.AppID = "p4"
 	msg.CorrelationID = uuid.NewString()
 
-	resp, err := p.s.BroadcastAndWait(ctx, args.PaymentID, msg)
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+
+	resp, err := p.s.BroadcastAwait(ctx, args.PaymentID, msg)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to broadcast message for payment request")
 	}
@@ -68,7 +72,9 @@ func (p *payd) PaymentCreate(ctx context.Context, args p4.PaymentCreateArgs, req
 	if err := msg.WithBody(req); err != nil {
 		return nil, err
 	}
-	resp, err := p.s.BroadcastAndWait(ctx, args.PaymentID, msg)
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
+	resp, err := p.s.BroadcastAwait(ctx, args.PaymentID, msg)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to send payment message for payment")
 	}

@@ -480,12 +480,12 @@ func (s *SocketServer) BroadcastDirect(clientID string, msg *sockets.Message) {
 	}
 }
 
-// BroadcastAndWait will send a broadcast to a channel and wait for a response,
+// BroadcastAwait will send a broadcast to a channel and wait for a response,
 // this will simply act on the first response to hit the server, if multiple peers respond, only the
 // first will be returned.
 //
 // The function will return if a msg is returned OR an error is returned OR the ctx times out.
-func (s *SocketServer) BroadcastAndWait(ctx context.Context, channelID string, msg *sockets.Message) (*sockets.Message, error) {
+func (s *SocketServer) BroadcastAwait(ctx context.Context, channelID string, msg *sockets.Message) (*sockets.Message, error) {
 	defer s.waitingMsgs.delete(msg.CorrelationID)
 	wm := newWaitMessage()
 	s.waitingMsgs.add(msg.CorrelationID, wm)
