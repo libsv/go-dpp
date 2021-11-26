@@ -24,10 +24,6 @@ func (w *waitMessage) deliver(msg *sockets.Message) {
 	w.msg <- msg
 }
 
-func (w *waitMessage) error(err error) {
-	w.errs <- err
-}
-
 func (w *waitMessage) wait(ctx context.Context) (*sockets.Message, error) {
 	defer func() {
 		close(w.errs)
