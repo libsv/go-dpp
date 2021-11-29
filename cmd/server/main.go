@@ -53,6 +53,9 @@ func main() {
 		Load()
 	log := log.NewZero(cfg.Logging)
 	log.Infof("\n------Environment: %#v -----\n", cfg.Server)
+	if err := cfg.Validate(); err != nil {
+		log.Fatal(err, "config error")
+	}
 
 	e := internal.SetupEcho(log)
 
@@ -63,13 +66,13 @@ func main() {
 	// setup transports
 	switch cfg.Transports.Mode {
 	case config.TransportModeHTTP:
-		internal.SetupHTTPEndpoints(internal.SetupDeps(*cfg), e)
+		internal.SetupHTTPEndpoints(internal.SetupDeps(*cfg, log), e)
 	case config.TransportModeSocket:
 		s := internal.SetupSockets(*cfg.Sockets, e)
 		internal.SetupSocketMetrics(s)
 		defer s.Close()
 	case config.TransportModeHybrid:
-		s := internal.SetupHybrid(*cfg, e)
+		s := internal.SetupHybrid(*cfg, log, e)
 		internal.SetupSocketMetrics(s)
 		defer s.Close()
 	}

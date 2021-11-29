@@ -39,7 +39,7 @@ type Deps struct {
 }
 
 // SetupDeps will setup all required dependent services.
-func SetupDeps(cfg config.Config) *Deps {
+func SetupDeps(cfg config.Config, l log.Logger) *Deps {
 	httpClient := &http.Client{Timeout: 5 * time.Second}
 	if !cfg.PayD.Secure { // for testing, don't validate server cert
 		// #nosec
@@ -52,7 +52,7 @@ func SetupDeps(cfg config.Config) *Deps {
 	paydStore := payd.NewPayD(cfg.PayD, data.NewClient(httpClient))
 
 	// services
-	paymentSvc := service.NewPayment(log.Noop{}, paydStore)
+	paymentSvc := service.NewPayment(l, paydStore)
 	paymentReqSvc := service.NewPaymentRequest(cfg.Server, paydStore, paydStore)
 	if cfg.PayD.Noop {
 		noopStore := noop.NewNoOp(log.Noop{})
@@ -121,13 +121,17 @@ func SetupSockets(cfg config.Socket, e *echo.Echo) *server.SocketServer {
 }
 
 // SetupHybrid will setup handlers for http=>socket communication.
-func SetupHybrid(cfg config.Config, e *echo.Echo) *server.SocketServer {
+func SetupHybrid(cfg config.Config, l log.Logger, e *echo.Echo) *server.SocketServer {
 	g := e.Group("/")
 	s := server.New(
 		server.WithMaxMessageSize(int64(cfg.Sockets.MaxMessageBytes)),
 		server.WithChannelTimeout(cfg.Sockets.ChannelTimeout))
 	paymentStore := socData.NewPayd(s)
-	paymentSvc := service.NewPayment(&log.Noop{}, paymentStore)
+	paymentSvc := service.NewPayment(l, paymentStore)
+	if cfg.PayD.Noop {
+		noopStore := noop.NewNoOp(log.Noop{})
+		paymentSvc = service.NewPayment(log.Noop{}, noopStore)
+	}
 	paymentReqSvc := service.NewPaymentRequestProxy(paymentStore)
 	proofsSvc := service.NewProof(paymentStore)
 

@@ -104,9 +104,7 @@ type Socket struct {
 
 // Transports enables or disables p4 transports.
 type Transports struct {
-	HTTPEnabled    bool
-	SocketsEnabled bool
-	Mode           string
+	Mode string
 }
 
 // ConfigurationLoader will load configuration items
