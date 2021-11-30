@@ -14,8 +14,8 @@ github.com/libsv/go-bk v0.1.4/go.mod h1:xbDkeFFpP0uyFaPLnP6TwaLpAsHaslZ0LftTdWlB
 github.com/libsv/go-bk v0.1.5 h1:fqbWy8nwVM/ayM8Nxe+lM7fN0FaUMMD1w5MCpwit7XQ=
 github.com/libsv/go-bk v0.1.5/go.mod h1:xbDkeFFpP0uyFaPLnP6TwaLpAsHaslZ0LftTdWlB6HI=
 github.com/libsv/go-bt/v2 v2.0.0-beta.7/go.mod h1:6Vk1qMlMoFJFNm7rR7NmFx4VwHNMCi4+V9WBqTd37rQ=
-github.com/libsv/go-bt/v2 v2.0.0-beta.12 h1:xjCt06cUW5a8o1Qyk7pGSkvThMLTy2HzPrJFmsQIPBc=
-github.com/libsv/go-bt/v2 v2.0.0-beta.12/go.mod h1:Ict9mJuFxjzNszELtCTtAHH5tQtQd2fnXUKG1n1ldP0=
+github.com/libsv/go-bt/v2 v2.0.0-beta.13 h1:kedGtn9OX6k+OpZF21Wh7EKnce782nYn2NuYVloWr4U=
+github.com/libsv/go-bt/v2 v2.0.0-beta.13/go.mod h1:u5g3GmVLffBV8sWvMqHR3JekC51OR9XYvmQp1h/XoiQ=
 github.com/matryer/is v1.4.0 h1:sosSmIWwkYITGrxZ25ULNDeKiMNzFSr4V/eqBQP0PeE=
 github.com/matryer/is v1.4.0/go.mod h1:8I/i5uYgLzgsgEloJE1U6xx5HkBQpAZvepWuujKwMRU=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
