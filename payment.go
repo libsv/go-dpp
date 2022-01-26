@@ -101,7 +101,7 @@ type PaymentACK struct {
 	Error int `json:"error,omitempty"`
 }
 
-// PeerChannelInfo holds peer channel information for subscribing to and reading from a peer channel
+// PeerChannelData holds peer channel information for subscribing to and reading from a peer channel.
 type PeerChannelData struct {
 	Host      string `json:"host"`
 	ChannelID string `json:"channel_id"`
