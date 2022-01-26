@@ -90,10 +90,10 @@ type ProofCallback struct {
 // PaymentACK message used in BIP270.
 // See https://github.com/moneybutton/bips/blob/master/bip-0270.mediawiki#paymentack
 type PaymentACK struct {
-	ID          string          `json:"id"`
-	TxID        string          `json:"tx_id"`
-	Memo        string          `json:"memo"`
-	PeerChannel PeerChannelInfo `json:"peer_channel"`
+	ID          string           `json:"id"`
+	TxID        string           `json:"tx_id"`
+	Memo        string           `json:"memo"`
+	PeerChannel *PeerChannelData `json:"peer_channel"`
 	// A number indicating why the transaction was not accepted. 0 or undefined indicates no error.
 	// A 1 or any other positive integer indicates an error. The errors are left undefined for now;
 	// it is recommended only to use “1” and to fill the memo with a textual explanation about why
@@ -102,7 +102,7 @@ type PaymentACK struct {
 }
 
 // PeerChannelInfo holds peer channel information for subscribing to and reading from a peer channel
-type PeerChannelInfo struct {
+type PeerChannelData struct {
 	Host      string `json:"host"`
 	ChannelID string `json:"channel_id"`
 	Token     string `json:"token"`
