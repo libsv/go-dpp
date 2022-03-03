@@ -1,4 +1,4 @@
-module github.com/libsv/go-p4
+module github.com/libsv/go-dpp
 
 go 1.17
 
