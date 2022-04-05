@@ -1,7 +1,6 @@
-# github.com/libsv/go-bc v0.1.9
+# github.com/libsv/go-bc v0.1.10
 ## explicit; go 1.17
 github.com/libsv/go-bc
-github.com/libsv/go-bc/spv
 # github.com/libsv/go-bk v0.1.6
 ## explicit; go 1.17
 github.com/libsv/go-bk/base58
