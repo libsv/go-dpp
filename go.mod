@@ -3,7 +3,7 @@ module github.com/libsv/go-dpp
 go 1.17
 
 require (
-	github.com/libsv/go-bc v0.1.10
+	github.com/libsv/go-bc v0.1.11
 	github.com/libsv/go-bk v0.1.6
 	github.com/libsv/go-bt/v2 v2.1.0-beta.2
 	github.com/matryer/is v1.4.0
