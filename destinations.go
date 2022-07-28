@@ -4,7 +4,9 @@ import (
 	"github.com/libsv/go-bt/v2/bscript"
 )
 
-type DPPNativeOutput struct {
+
+// NativeOutput defines a native type output as opposed to a token for example.
+type NativeOutput struct {
 	// Amount is the number of satoshis to be paid.
 	Amount uint64 `json:"amount" binding:"required" example:"100000"`
 	// Script is a locking script where payment should be sent, formatted as a hexadecimal string.

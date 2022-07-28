@@ -8,33 +8,43 @@ import (
 // See https://tsc.bitcoinassociation.net/standards/direct_payment_protocol
 
 
-type DPPPolicies struct {
+// Policies An object containing some policy information like fees or whether Ancestors are
+// required in the `Payment`.
+type Policies struct {
 	// FeeRate defines the amount of fees a users wallet should add to the payment
 	// when submitting their final payments.
-	FeeRate map[string]map[string]int `json:"fees,omitempty"`
-	SPVRequired bool `json:"SPVRequired,omitempty"`
-	LockTime uint32 `json:"lockTime,omitempty"`
+	FeeRate     map[string]map[string]int `json:"fees,omitempty"`
+	SPVRequired bool                      `json:"SPVRequired,omitempty"`
+	LockTime    uint32                    `json:"lockTime,omitempty"`
 }
 
-type DPPInput struct {
-	ScriptSig string `json:"scriptSig" binding:"required"`// string. required.
-	TxId string `json:"txid" binding:"required"`// string. required.
-	Vout uint32 `json:"vout" binding:"required"`// integer. required.
-	Value uint64 `json:"value" binding:"required"`// integer. required.
-	NSequence int `json:"nSequence,omitempty"` // number. optional.
+// NativeInput a way of declaring requirements for the inputs which should be used.
+type NativeInput struct {
+	ScriptSig string `json:"scriptSig" binding:"required"` // string. required.
+	TxID      string `json:"txid" binding:"required"`      // string. required.
+	Vout      uint32 `json:"vout" binding:"required"`      // integer. required.
+	Value     uint64 `json:"value" binding:"required"`     // integer. required.
+	NSequence int    `json:"nSequence,omitempty"`          // number. optional.
 }
 
+// Inputs provides options of different arrays of input script types.
+// Currently, only "native" type input are supported.
+type Inputs struct {
+	NativeOutputs []NativeInput `json:"native"`
+}
 
-type DPPOutputs struct {
-	NativeOutputs []DPPNativeOutput `json:"native"`
+// Outputs provides options of different arrays of output script types.
+// Currently, only "native" type outputs are supported.
+type Outputs struct {
+	NativeOutputs []NativeOutput `json:"native"`
 }
 
 // TransactionTerms a single definition of requested transaction format for the standard payment mode:
 // "ef63d9775da5" in the DPP TSC spec.
 type TransactionTerms struct {
-	Outputs DPPOutputs `json:"outputs"`
-	Inputs []DPPInput `json:"inputs,omitempty"`
-	Policies *DPPPolicies `json:"policies"`
+	Outputs  Outputs   `json:"outputs"`
+	Inputs   Inputs     `json:"inputs,omitempty"`
+	Policies *Policies `json:"policies"`
 }
 
 // PaymentModes message used in DPP TSC spec.
@@ -56,7 +66,7 @@ type PaymentRequest struct {
 	Version string `json:"version" binding:"required" example:"1.0"`
 	// Outputs an array of outputs. DEPRECATED but included for backward compatibility.
 	// Optional.
-	Outputs []DPPNativeOutput `json:"outputs,omitempty"`
+	Outputs []NativeOutput `json:"outputs,omitempty"`
 	// CreationTimestamp Unix timestamp (seconds since 1-Jan-1970 UTC) when the PaymentRequest was created.
 	// Required.
 	CreationTimestamp int64 `json:"creationTimestamp" binding:"required" swaggertype:"primitive,int" example:"1648163657"`
@@ -78,7 +88,7 @@ type PaymentRequest struct {
 	Beneficiary *Merchant `json:"beneficiary,omitempty"`
 	// Modes TSC payment modes specified by ID (and well defined) modes customer can choose to pay
 	// A key-value map. required field but not if legacy BIP270 outputs are provided
-	Modes   *PaymentModes `json:"modes"`
+	Modes *PaymentModes `json:"modes"`
 }
 
 // PaymentRequestArgs are request arguments that can be passed to the service.
