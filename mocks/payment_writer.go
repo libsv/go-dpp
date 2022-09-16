@@ -15,19 +15,19 @@ var _ dpp.PaymentWriter = &PaymentWriterMock{}
 
 // PaymentWriterMock is a mock implementation of dpp.PaymentWriter.
 //
-// 	func TestSomethingThatUsesPaymentWriter(t *testing.T) {
+//	func TestSomethingThatUsesPaymentWriter(t *testing.T) {
 //
-// 		// make and configure a mocked dpp.PaymentWriter
-// 		mockedPaymentWriter := &PaymentWriterMock{
-// 			PaymentCreateFunc: func(ctx context.Context, args dpp.PaymentCreateArgs, req dpp.Payment) (*dpp.PaymentACK, error) {
-// 				panic("mock out the PaymentCreate method")
-// 			},
-// 		}
+//		// make and configure a mocked dpp.PaymentWriter
+//		mockedPaymentWriter := &PaymentWriterMock{
+//			PaymentCreateFunc: func(ctx context.Context, args dpp.PaymentCreateArgs, req dpp.Payment) (*dpp.PaymentACK, error) {
+//				panic("mock out the PaymentCreate method")
+//			},
+//		}
 //
-// 		// use mockedPaymentWriter in code that requires dpp.PaymentWriter
-// 		// and then make assertions.
+//		// use mockedPaymentWriter in code that requires dpp.PaymentWriter
+//		// and then make assertions.
 //
-// 	}
+//	}
 type PaymentWriterMock struct {
 	// PaymentCreateFunc mocks the PaymentCreate method.
 	PaymentCreateFunc func(ctx context.Context, args dpp.PaymentCreateArgs, req dpp.Payment) (*dpp.PaymentACK, error)
@@ -69,7 +69,8 @@ func (mock *PaymentWriterMock) PaymentCreate(ctx context.Context, args dpp.Payme
 
 // PaymentCreateCalls gets all the calls that were made to PaymentCreate.
 // Check the length with:
-//     len(mockedPaymentWriter.PaymentCreateCalls())
+//
+//	len(mockedPaymentWriter.PaymentCreateCalls())
 func (mock *PaymentWriterMock) PaymentCreateCalls() []struct {
 	Ctx  context.Context
 	Args dpp.PaymentCreateArgs

@@ -15,19 +15,19 @@ var _ dpp.PaymentService = &PaymentServiceMock{}
 
 // PaymentServiceMock is a mock implementation of dpp.PaymentService.
 //
-// 	func TestSomethingThatUsesPaymentService(t *testing.T) {
+//	func TestSomethingThatUsesPaymentService(t *testing.T) {
 //
-// 		// make and configure a mocked dpp.PaymentService
-// 		mockedPaymentService := &PaymentServiceMock{
-// 			PaymentCreateFunc: func(ctx context.Context, args dpp.PaymentCreateArgs, req dpp.Payment) (*dpp.PaymentACK, error) {
-// 				panic("mock out the PaymentCreate method")
-// 			},
-// 		}
+//		// make and configure a mocked dpp.PaymentService
+//		mockedPaymentService := &PaymentServiceMock{
+//			PaymentCreateFunc: func(ctx context.Context, args dpp.PaymentCreateArgs, req dpp.Payment) (*dpp.PaymentACK, error) {
+//				panic("mock out the PaymentCreate method")
+//			},
+//		}
 //
-// 		// use mockedPaymentService in code that requires dpp.PaymentService
-// 		// and then make assertions.
+//		// use mockedPaymentService in code that requires dpp.PaymentService
+//		// and then make assertions.
 //
-// 	}
+//	}
 type PaymentServiceMock struct {
 	// PaymentCreateFunc mocks the PaymentCreate method.
 	PaymentCreateFunc func(ctx context.Context, args dpp.PaymentCreateArgs, req dpp.Payment) (*dpp.PaymentACK, error)
@@ -69,7 +69,8 @@ func (mock *PaymentServiceMock) PaymentCreate(ctx context.Context, args dpp.Paym
 
 // PaymentCreateCalls gets all the calls that were made to PaymentCreate.
 // Check the length with:
-//     len(mockedPaymentService.PaymentCreateCalls())
+//
+//	len(mockedPaymentService.PaymentCreateCalls())
 func (mock *PaymentServiceMock) PaymentCreateCalls() []struct {
 	Ctx  context.Context
 	Args dpp.PaymentCreateArgs

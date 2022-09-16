@@ -69,6 +69,5 @@ type PaymentTermsService interface {
 
 // PaymentTermsReader will return a new payment request.
 type PaymentTermsReader interface {
-	PaymentTerms(ctx context.Context, args PaymentTermsArgs) (*PaymentTerms, error)
-	PaymentTermsSecure(ctx context.Context, args PaymentTermsArgs) (*envelope.JSONEnvelope, error)
+	PaymentTerms(ctx context.Context, args PaymentTermsArgs) (*envelope.JSONEnvelope, error)
 }
