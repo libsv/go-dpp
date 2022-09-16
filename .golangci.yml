@@ -268,6 +268,11 @@ linters-settings:
     require-explanation: true
     # Enable to require nolint directives to mention the specific linter being suppressed. Default is false.
     require-specific: true
+  revive:
+    # This has the worst kind of vague junk warnings about "package-comments" and no useful documentation.
+    # https://github.com/golangci/golangci-lint/issues/2610
+    severity: warning
+    confidence: 0.8
   rowserrcheck:
     packages:
       - github.com/jmoiron/sqlx
@@ -353,6 +358,10 @@ linters:
     - goerr113
     - testpackage
     - nlreturn
+    - deadcode
+    - scopelint
+    - varcheck
+    - structcheck
     - gci
   disable-all: false
   presets:

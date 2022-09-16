@@ -1,3 +1,12 @@
+/*
+Package dpp defines some kind of DPP structure.
+
+These structures are defined in the TSC spec:
+https://tsc.bitcoinassociation.net/standards/direct_payment_protocol
+
+This comment is here to qualify as the required make-work for the jobsworth who implemented the
+revive "package-comment" linter.
+*/
 package dpp
 
 // Beneficiary to be displayed to the user.

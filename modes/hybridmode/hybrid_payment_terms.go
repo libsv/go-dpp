@@ -4,10 +4,6 @@ import (
 	"github.com/libsv/go-dpp/nativetypes"
 )
 
-// These structures are defined in the TSC spec:
-// See https://tsc.bitcoinassociation.net/standards/direct_payment_protocol
-
-
 // Policies An object containing some policy information like fees or whether Ancestors are
 // required in the `Payment`.
 type Policies struct {

@@ -1,7 +1,15 @@
+/*
+Package hybridmode defines the subset of the DPP payment terms structure related to the hybrid mode.
+
+These structures are defined in the TSC spec:
+https://tsc.bitcoinassociation.net/standards/direct_payment_protocol
+
+This comment is here to qualify as the required make-work for the jobsworth who implemented the
+revive "package-comment" linter.
+*/
 package hybridmode
 
 import "github.com/libsv/go-bc/spv"
-
 
 // Payment includes data required for hybridmode payment mode.
 type Payment struct {

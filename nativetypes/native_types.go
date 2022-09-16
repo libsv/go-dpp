@@ -1,3 +1,12 @@
+/*
+Package nativetypes defines some kind of DPP structure.
+
+These structures are defined in the TSC spec:
+https://tsc.bitcoinassociation.net/standards/direct_payment_protocol
+
+This comment is here to qualify as the required make-work for the jobsworth who implemented the
+revive "package-comment" linter.
+*/
 package nativetypes
 
 import (
@@ -13,7 +22,6 @@ type NativeOutput struct {
 	// Description, an optional description such as "tip" or "sales tax". Maximum length is 100 chars.
 	Description string `json:"description,omitempty" example:"paymentReference 123456"`
 }
-
 
 // NativeInput a way of declaring requirements for the inputs which should be used. It is "native" to distinguish it
 // from a token input in the hybridmode payment mode.
