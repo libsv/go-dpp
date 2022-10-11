@@ -16,13 +16,4 @@ type PaymentACK struct {
 	Mode        *hybridmode.PaymentACK      `json:"mode"`
 	PeerChannel *hybridmode.PeerChannelData `json:"peerChannel"`
 	RedirectURL string                      `json:"redirectUrl"`
-
-	// Memo may contain information about why there was an error. This field is poorly defined until
-	// error reporting is more standardised.
-	Memo string
-	// A number indicating why the transaction was not accepted. 0 or undefined indicates no error.
-	// A 1 or any other positive integer indicates an error. The errors are left undefined for now;
-	// it is recommended only to use “1” and to fill the memo with a textual explanation about why
-	// the transaction was not accepted until further numbers are defined and standardised.
-	Error int `json:"error,omitempty"`
 }

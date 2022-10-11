@@ -269,10 +269,11 @@ linters-settings:
     # Enable to require nolint directives to mention the specific linter being suppressed. Default is false.
     require-specific: true
   revive:
-    # This has the worst kind of vague junk warnings about "package-comments" and no useful documentation.
-    # https://github.com/golangci/golangci-lint/issues/2610
-    severity: warning
-    confidence: 0.8
+    rules:
+      # https://github.com/mgechev/revive/blob/master/RULES_DESCRIPTIONS.md#package-comments
+      - name: package-comments
+        severity: warning
+        disabled: true
   rowserrcheck:
     packages:
       - github.com/jmoiron/sqlx
